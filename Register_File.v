@@ -5,7 +5,7 @@
 // 
 // Create Date: 2021/04/26 15:49:39
 // Design Name: 
-// Module Name: ROM
+// Module Name: Register_File
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,27 +20,24 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module ROM #(   parameter DATA_BITWIDTH = 8, parameter ADDR_BITWIDTH = 4) 
-            (   input clk, input rstN, input en, 
-                output reg[DATA_BITWIDTH-1:0] dout );
+module Register_File #( parameter DATA_BITWIDTH = 8, parameter ADDR_BITWIDTH = 4) 
+                    (   input clk, rstN, en, we,
+                        input[DATA_BITWIDTH-1:0] din,
+                        input[ADDR_BITWIDTH-1:0] rd_addr, wr_addr,
+                        output[DATA_BITWIDTH-1:0] dout );
     integer i;
-    
-    reg[ADDR_BITWIDTH-1:0] read_addr;
-    
-    (*rom_style = "block" *)
+
     reg[DATA_BITWIDTH-1:0] memory[0:(1 << ADDR_BITWIDTH)-1];
-    
+
+    assign dout = en ? memory[rd_addr] : {DATA_BITWIDTH{1'bz}};
     always @(posedge clk, negedge rstN) begin
-        if(!rstN) begin
-            read_addr <= 0;
-            for(i = 0; i < (1 << ADDR_BITWIDTH); i = i + 1) begin
+        if(!rstN) begin: RESET
+            for(i = 0; i < (1 << ADDR_BITWIDTH); i = i + 1)
                memory[i] <= 0;
-            end
         end 
         else begin
-            if(en) begin
-                dout <= memory[read_addr];
-                read_addr <= read_addr + 1;
+            if (!en && we) begin: WRITE
+                memory[wr_addr] <= din;
             end
         end
     end

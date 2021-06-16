@@ -20,25 +20,28 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Binary_Adder_Tree #(  parameter DATA_BITWIDTH = 8,
-                        parameter BREADTH_OF_TREE = 32
-                    )
-                    (
-                        input clk, rstN,
-                        input[DATA_BITWIDTH*BREADTH_OF_TREE-1:0] din,
-                        output[DATA_BITWIDTH-1:0] sum
-                    );
+module Binary_Adder_Tree    #(  parameter DATA_BITWIDTH = 8,
+                                parameter BREADTH_OF_TREE = 32  )
+                            (   input clk, rstN,
+                                input[32*BREADTH_OF_TREE-1:0] din,
+                                output[DATA_BITWIDTH-1:0] sum   );
     localparam NUM_OF_NODES = 2 * BREADTH_OF_TREE - 1;
+    localparam LEVEL_OF_TREE = $clog2(BREADTH_OF_TREE);
 
-    wire[DATA_BITWIDTH-1:0] w_din[0:BREADTH_OF_TREE-1];
-    reg[DATA_BITWIDTH-1:0] nodes[0:NUM_OF_NODES-1];
-    
-    assign sum = nodes[NUM_OF_NODES - 1];
+    wire[31:0] w_din[0:BREADTH_OF_TREE-1];
+    reg[31:0] nodes[0:NUM_OF_NODES-1];
+    wire[31:0] w_sum;
 
-    genvar gi;
+    assign w_sum = nodes[NUM_OF_NODES - 1];
+
+    ReLU    #(  .DATA_BITWIDTH(DATA_BITWIDTH) )
+    relu    (   .din(w_sum),
+                .dout(sum)  );
+
+    genvar gi, gj;
     generate
         for(gi = 0; gi < BREADTH_OF_TREE; gi = gi + 1) begin: VECTOR_TO_ARRAY
-            assign w_din[gi] = din[(gi * DATA_BITWIDTH) + DATA_BITWIDTH - 1 : gi * DATA_BITWIDTH];
+            assign w_din[gi] = din[gi * 32 +: 32];
         end
     endgenerate
     
