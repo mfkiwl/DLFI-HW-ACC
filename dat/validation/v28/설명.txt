@@ -1,0 +1,21 @@
+- frame_1.txt
+ = 첫 번째 프레임 영상
+- frame_2.txt
+ = 두 번째 프레임 영상
+
+- e1_A.txt 
+ = frame_1.txt 에 대해 Encoder의 각 layer마다 결과. (Layer 0, 1, 2 순서대로 붙어있기 때문에 검증 잘 해야함)
+- e2_A.txt
+ = frame_2.txt 에 대해 동일
+
+- enc0_w.txt
+ = Encoder의 layer 0의 weight
+- enc1_w.txt
+ = Encoder의 layer 1의 weight
+- enc2_w.txt
+ = Encoder의 layer 2의 weight
+
+- out_A.txt
+ = DVF 구조 맨 마지막 모션벡터 구하는 레이어의 Activation
+- out_w.txt
+ = 위 레이어의 Weight

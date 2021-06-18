@@ -1,0 +1,37 @@
+
+
+
+x(f) = x(int) * scale 
+
+z(f)=  x(f) * y(f) 
+
+z(i) * z_s = x(i) * x_s * y(i) *y_s 
+
+z(i)  = x_s*y_s/z_s  *  x(i) * y(i) 
+
+scale = x(f)max - x(f)min / 255 
+
+
+
+z(int) =  w_scale * act_scale /z_scale  * (w(int) * act(int)) 
+
+
+enc0 결과 = 결과값 * enc0 * 1.0 / relu0_s
+enc1 결과 = 결과값 * enc1 * relu0_s / relu1_s
+enc2 결과 = 결과값 * enc2 * relu1_s / relu2_s
+  
+
+
+
+
+z0(int) =  0.0017 * 1  / 1.4265 ( x(int) * act(int)) 
+
+
+w0= 0.0017
+z0= 1.4265
+
+w1 = 0.0017
+z1 = 0.5169
+
+w2 = 0.0020
+z2= 
